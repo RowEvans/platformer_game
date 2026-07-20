@@ -1,14 +1,18 @@
 import pygame
 
-class Player():
+class Player(pygame.sprite.Sprite):
     def __init__(self, color, width, height, x, y, y_velocity, x_velocity):
-        self.rect = pygame.Rect(x, y, width, height)
-        self.color = color
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = pygame.Surface((width, height))
+        self.image.fill(color)
+
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+    
         self.y_velo = y_velocity
         self.x_velo = x_velocity
-
-    def draw(self, surface):
-        pygame.draw.rect(surface, self.color, self.rect)
 
     def update(self):
         self.rect.y += self.y_velo

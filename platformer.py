@@ -1,6 +1,6 @@
 import pygame
 
-from platforms import Platform
+from platforms import *
 from player import Player
 
 pygame.init()
@@ -14,8 +14,11 @@ clock = pygame.time.Clock()
 gravity = 1
 friction = 1
 
+sprite_group = pygame.sprite.Group()
 player = Player(black, 50, 50, 200, 100, 0, 0)
-platform = Platform(tan, 500, 1000, 100, 500)
+level = Level_01(player)
+
+sprite_group.add(player)
 
 running = True
 
@@ -25,11 +28,11 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    if player.isCollidePlatform(platform):
-        player.y_velo += gravity        
-    else: 
-        player.rect.y = platform.rect.y - player.rect.height
-        player.y_velo = 0
+    #if player.isCollidePlatform(platform):
+    #    player.y_velo += gravity        
+    #else: 
+    #    player.rect.y = platform.rect.y - player.rect.height
+    #    player.y_velo = 0
     
     if player.x_velo > 0:
         player.x_velo -= friction
@@ -37,10 +40,11 @@ while running:
         player.x_velo += friction
 
     screen.fill(sky_blue)
-    platform.draw(screen)
-    player.draw(screen)
+    sprite_group.draw(screen)
+    level.draw(screen)
     
     player.update()
+    level.update()
 
     pygame.display.flip()
     pygame.key.set_repeat(50, 50)
