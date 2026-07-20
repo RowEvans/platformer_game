@@ -4,21 +4,24 @@ from platforms import *
 from player import Player
 
 pygame.init()
-sky_blue = (173, 216, 230)
-tan = (214, 181, 136)
-black = (0, 0, 0)
 
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 
-gravity = 1
-friction = 1
+RED = (255, 0, 0)
 
-sprite_group = pygame.sprite.Group()
-player = Player(black, 50, 50, 200, 100, 0, 0)
-level = Level_01(player)
+pygame.display.set_caption("Platformer")
 
-sprite_group.add(player)
+active_sprites = pygame.sprite.Group()
+player = Player()
+
+level_list = [Level_01(player)]
+current_level_idx = 0
+current_level = level_list[current_level_idx]
+
+player.level = current_level
+
+active_sprites.add(player)
 
 running = True
 
@@ -27,24 +30,16 @@ while running:
         player.handleEvent(event)
         if event.type == pygame.QUIT:
             running = False
+        
+        player.updImg()
 
-    #if player.isCollidePlatform(platform):
-    #    player.y_velo += gravity        
-    #else: 
-    #    player.rect.y = platform.rect.y - player.rect.height
-    #    player.y_velo = 0
-    
-    if player.x_velo > 0:
-        player.x_velo -= friction
-    elif player.x_velo < 0:
-        player.x_velo += friction
-
-    screen.fill(sky_blue)
-    sprite_group.draw(screen)
-    level.draw(screen)
+    current_level.draw(screen)
+    active_sprites.draw(screen)
+    for sprite in active_sprites:
+        pygame.draw.rect(screen, RED, sprite.rect, 1)
     
     player.update()
-    level.update()
+    current_level.update()
 
     pygame.display.flip()
     pygame.key.set_repeat(50, 50)

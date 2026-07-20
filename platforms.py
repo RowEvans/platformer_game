@@ -1,7 +1,10 @@
 import pygame
 
+#globals
 sky_blue = (173, 216, 230)
 tan = (214, 181, 136)
+black = (0, 0, 0)
+
 
 class Platform(pygame.sprite.Sprite):
     def __init__(self, color, height, width):
