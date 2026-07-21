@@ -1,7 +1,9 @@
 import pygame
+import state
 
 from platforms import *
-from player import Player
+from player import *
+from buttons import *
 
 pygame.init()
 
@@ -21,6 +23,9 @@ current_level = level_list[current_level_idx]
 
 player.level = current_level
 
+start_button = Button("START", 400, 300, 200, 100, WHITE, BLACK, 0)
+quit_button = Button("QUIT", 700, 300, 200, 100, WHITE, BLACK, 1)
+
 active_sprites.add(player)
 
 running = True
@@ -28,15 +33,24 @@ running = True
 while running:
     for event in pygame.event.get():
         player.handleEvent(event)
-        if event.type == pygame.QUIT:
+        start_button.handleEvent(event)
+        quit_button.handleEvent(event)
+        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
             running = False
 
     current_level.draw(screen)
     active_sprites.draw(screen)
     for sprite in active_sprites:
         pygame.draw.rect(screen, RED, sprite.rect, 1)
+
+    if state.game_over:
+        pygame.event.set_blocked(pygame.KEYDOWN)
+        start_button.draw(screen)
+        quit_button.draw(screen)
+    else:
+        pygame.event.set_allowed(pygame.KEYDOWN)
     
-    player.update(screen)
+    player.update()
     current_level.update()
 
     pygame.display.flip()

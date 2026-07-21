@@ -1,4 +1,5 @@
 import pygame
+import state
 
 resistance = 1
 WHITE = (255, 255, 255)
@@ -68,13 +69,12 @@ class Player(pygame.sprite.Sprite):
         self.x_velo = 0
         self.y_velo = 0
 
-        self.isAlive = True
         self.level = None
 
-    def update(self, screen):
+    def update(self):
 
         self.updForces()
-        self.updImg(screen)
+        self.updImg()
 
         self.rect.y += self.y_velo
         
@@ -145,7 +145,7 @@ class Player(pygame.sprite.Sprite):
                 self.state = 3
                 self.frame_idx = 0
 
-    def updImg(self, screen):
+    def updImg(self):
         if self.state == 0:
             self.frame_counter += 1
 
@@ -178,8 +178,6 @@ class Player(pygame.sprite.Sprite):
                 self.image = pygame.transform.scale(self.image, size)
 
         elif self.state == 4:
-            self.isAlive = False
-            pygame.event.set_blocked(pygame.KEYDOWN)
             idx = 0
 
             for i in range(100):
@@ -189,16 +187,8 @@ class Player(pygame.sprite.Sprite):
 
                     idx += 1
             
-            self.reset(screen)
+            state.game_over = True
                     
         else:
             pass
 
-    def reset(self, screen):
-        font = pygame.font.Font("platformer_game/assets/fonts/PixelOperator8.ttf")
-
-        text = font.render("Press R to Reset", True, WHITE, None)
-        text_rect = text.get_rect(center=(640, 360))
-        screen.blit(text, text_rect)
-
-        pygame.event.set_allowed(pygame.KEYDOWN)
