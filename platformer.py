@@ -30,15 +30,13 @@ while running:
         player.handleEvent(event)
         if event.type == pygame.QUIT:
             running = False
-        
-        player.updImg()
 
     current_level.draw(screen)
     active_sprites.draw(screen)
     for sprite in active_sprites:
         pygame.draw.rect(screen, RED, sprite.rect, 1)
     
-    player.update()
+    player.update(screen)
     current_level.update()
 
     pygame.display.flip()
