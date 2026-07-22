@@ -1,7 +1,7 @@
 import pygame
 import state
 
-from platforms import *
+from levels import *
 from player import *
 from buttons import *
 
@@ -17,7 +17,7 @@ pygame.display.set_caption("Platformer")
 active_sprites = pygame.sprite.Group()
 player = Player()
 
-level_list = [Level_01(player)]
+level_list = [Level_01(player), Level_02(player)]
 current_level_idx = 0
 current_level = level_list[current_level_idx]
 
@@ -40,9 +40,22 @@ while running:
 
     current_level.draw(screen)
     active_sprites.draw(screen)
-    for sprite in active_sprites:
-        pygame.draw.rect(screen, RED, sprite.rect, 1)
 
+    coin_collides = pygame.sprite.spritecollide(player, current_level.coin_list, False)
+    if len(coin_collides) == 1:
+        coin_collides[0].collect()
+    
+    for coin in current_level.coin_list:
+        if coin.peaked:
+            next_idx = current_level_idx + 1
+            if next_idx < len(level_list):
+                current_level_idx = next_idx
+                current_level = level_list[current_level_idx]
+                player.level = current_level
+                player.reset()
+            break
+    
+        
     if state.game_over:
         pygame.event.set_blocked(pygame.KEYDOWN)
         start_button.draw(screen)

@@ -78,10 +78,12 @@ class Player(pygame.sprite.Sprite):
         self.updImg()
 
         self.rect.y += self.y_velo
+
+        falling = self.y_velo > 0
         
         block_collides = pygame.sprite.spritecollide(self, self.level.platform_list, False)
         for block in block_collides:
-            if self.y_velo > 0:
+            if falling:
                 self.rect.bottom = block.rect.top
             else:
                 self.rect.top = block.rect.bottom
@@ -90,9 +92,11 @@ class Player(pygame.sprite.Sprite):
             self.state = 0
 
         self.rect.x += self.x_velo
+        moving = self.x_velo > 0
+
         block_collides = pygame.sprite.spritecollide(self, self.level.platform_list, False)
         for block in block_collides:
-            if self.x_velo > 0:
+            if moving:
                 self.rect.right = block.rect.left
             else:
                 self.rect.left = block.rect.right
