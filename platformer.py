@@ -23,8 +23,8 @@ current_level = level_list[current_level_idx]
 
 player.level = current_level
 
-start_button = Button("START", 400, 300, 200, 100, WHITE, BLACK, 0)
-quit_button = Button("QUIT", 700, 300, 200, 100, WHITE, BLACK, 1)
+start_button = Button("START", 400, 300, 200, 100, WHITE, BLACK, 0, player)
+quit_button = Button("QUIT", 700, 300, 200, 100, WHITE, BLACK, 1, player)
 
 active_sprites.add(player)
 

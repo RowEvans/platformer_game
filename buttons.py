@@ -6,7 +6,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 class Button():
-    def __init__(self, text, x, y, width, height, color, bg_color, id):
+    def __init__(self, text, x, y, width, height, color, bg_color, id, player):
         
         self.rect = pygame.Rect(x, y, width, height)
         self.bg_color = bg_color
@@ -15,6 +15,7 @@ class Button():
         self.text_surf = self.font.render(text, True, color, bg_color)
         self.text_rect = self.text_surf.get_rect(center=self.rect.center)
         self.id = id
+        self.player = player
 
     def draw(self, screen):
         screen.blit(self.text_surf, self.rect)
@@ -24,6 +25,7 @@ class Button():
             if self.rect.collidepoint(event.pos):
                 if self.id == 0:
                     state.game_over = False
+                    self.player.reset()
                 else:
                     pygame.quit()
                     sys.exit()

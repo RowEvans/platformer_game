@@ -69,6 +69,7 @@ class Player(pygame.sprite.Sprite):
         self.x_velo = 0
         self.y_velo = 0
 
+        self.dead = False
         self.level = None
 
     def update(self):
@@ -102,6 +103,7 @@ class Player(pygame.sprite.Sprite):
         enemy_collides = pygame.sprite.spritecollide(self, self.level.enemy_list, False)
         for enemy in enemy_collides:
             self.state = 4
+            state.game_over = True
 
         if self.rect.y > 720:
             self.rect.y = 0
@@ -178,17 +180,40 @@ class Player(pygame.sprite.Sprite):
                 self.image = pygame.transform.scale(self.image, size)
 
         elif self.state == 4:
-            idx = 0
+            self.frame_counter += 1
+            if self.frame_counter >= 30:
+                self.frame_counter = 0
 
-            for i in range(100):
-                if i % 25 == 0:
-                    self.image = death_frames[idx]
-                    self.image = pygame.transform.scale(self.image, size)
+                next_idx = self.frame_idx + 1
 
-                    idx += 1
-            
-            state.game_over = True
+                if next_idx >= len(death_frames) - 1:
+                    self.frame_idx = len(death_frames) - 1
+
+                    if not self.dead:
+                        self.dead = True
+                        state.game_over = True
+                else:
+                    self.frame_idx = next_idx
+
+                self.image = death_frames[self.frame_idx]
+                self.image = pygame.transform.scale(self.image, size)
                     
         else:
             pass
 
+    def reset(self):
+        
+        self.state = 0
+        self.image = idle_frames[0]
+        self.image = pygame.transform.scale(self.image, size)
+
+        self.frame_idx = 0
+        self.frame_counter = 0
+
+        self.x_velo = 0
+        self.y_velo = 0
+
+        self.rect.x = 100
+        self.rect.y = 0
+
+        self.dead = False
