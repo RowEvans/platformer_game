@@ -23,8 +23,8 @@ current_level = level_list[current_level_idx]
 
 player.level = current_level
 
-start_button = Button("START", 400, 300, 200, 100, WHITE, BLACK, 0, player)
-quit_button = Button("QUIT", 700, 300, 200, 100, WHITE, BLACK, 1, player)
+start_button = Button("START", 400, 300, WHITE, BLACK, 0, player)
+quit_button = Button("QUIT", 700, 300, WHITE, BLACK, 1, player)
 
 overlay = Transition()
 
@@ -50,7 +50,7 @@ while running:
         coin.collect()
     
     for coin in current_level.coin_list:
-        if coin.peaked and not overlay.active:
+        if coin.peaked and not overlay.active and current_level_idx < len(level_list) - 1:
             overlay.start()
             break
         
