@@ -26,6 +26,8 @@ player.level = current_level
 start_button = Button("START", 400, 300, 200, 100, WHITE, BLACK, 0, player)
 quit_button = Button("QUIT", 700, 300, 200, 100, WHITE, BLACK, 1, player)
 
+overlay = Transition()
+
 active_sprites.add(player)
 
 running = True
@@ -40,21 +42,17 @@ while running:
 
     current_level.draw(screen)
     active_sprites.draw(screen)
+    overlay.draw(screen)
 
     coin_collides = pygame.sprite.spritecollide(player, current_level.coin_list, False)
     if len(coin_collides) == 1:
-        coin_collides[0].collect()
+        coin = coin_collides[0]
+        coin.collect()
     
     for coin in current_level.coin_list:
-        if coin.peaked:
-            next_idx = current_level_idx + 1
-            if next_idx < len(level_list):
-                current_level_idx = next_idx
-                current_level = level_list[current_level_idx]
-                player.level = current_level
-                player.reset()
+        if coin.peaked and not overlay.active:
+            overlay.start()
             break
-    
         
     if state.game_over:
         pygame.event.set_blocked(pygame.KEYDOWN)
@@ -65,6 +63,15 @@ while running:
     
     player.update()
     current_level.update()
+    overlay.update()
+    if overlay.peaked:
+        overlay.peaked = False
+        next_idx = current_level_idx + 1
+        if next_idx < len(level_list):
+            current_level_idx = next_idx
+            current_level = level_list[current_level_idx]
+            player.level = current_level
+            player.reset()
 
     pygame.display.flip()
     pygame.key.set_repeat(50, 50)

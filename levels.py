@@ -72,6 +72,8 @@ class Coin(pygame.sprite.Sprite):
         self.frame_idx = 0
 
     def update(self):
+        pygame.sprite.Sprite.update(self)
+
         if self.collected:
             self.rect.y += self.y_velo
             self.updCollected()
@@ -81,11 +83,7 @@ class Coin(pygame.sprite.Sprite):
         if self.frame_counter >= 5:
             self.frame_counter = 0
 
-            next_idx = self.frame_idx + 1
-            if next_idx >= len(self.coin_frames) - 1:
-                self.frame_idx = len(self.coin_frames) - 1
-            else:
-                self.frame_idx = next_idx
+            self.frame_idx = (self.frame_idx + 1) % len(self.coin_frames)
 
             self.image = self.coin_frames[self.frame_idx]
             self.image = pygame.transform.scale(self.image, self.size)
@@ -104,7 +102,43 @@ class Coin(pygame.sprite.Sprite):
             if self.y_velo >= 0:
                 self.peaked = True
 
+class Transition():
+    def __init__(self):
+        self.overlay = pygame.Surface((1280, 720))
+        self.overlay.fill(BLACK)
+        self.alpha = 0
+        self.fading_in = True
+        self.active = False
+        self.peaked = False
+        self.overlay.set_alpha(0)
 
+    def start(self):
+        self.active = True
+        self.fading_in = True
+        self.alpha = 0
+
+    def draw(self, screen):
+        if self.active:
+            screen.blit(self.overlay, (0, 0))
+    def update(self):
+        if not self.active:
+            return
+
+        step = 10
+
+        if self.fading_in:
+            self.alpha += step
+            if self.alpha >= 255:
+                self.alpha = 255
+                self.fading_in = False
+                self.peaked = True
+        else:
+            self.alpha -= step
+            if self.alpha <= 0:
+                self.alpha = 0
+                self.active = False
+
+        self.overlay.set_alpha(self.alpha) 
 
 class Level(object):
     #Parent class
