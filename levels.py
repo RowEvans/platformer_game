@@ -234,3 +234,27 @@ class Level_02(Level):
             coin_sprite = Coin(coin)
             coin_sprite.player = self.player
             self.coin_list.add(coin_sprite)
+
+class Level_03(Level):
+    def __init__(self, player):
+        super().__init__(player)
+
+        #platforms (width, height, x, y)
+        level = [(100, 620),
+                 (450, 550), 
+                 (800, 500),
+                 (1000, 400),
+                 (700, 250),
+                 (400, 200)]
+
+        for platform in level:
+            block = Platform(platform)
+            block.player = self.player
+            self.platform_list.add(block)
+
+        coins = [(500, 150)]
+
+        for coin in coins:
+            coin_sprite = Coin(coin)
+            coin_sprite.player = self.player
+            self.coin_list.add(coin_sprite)

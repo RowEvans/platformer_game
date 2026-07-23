@@ -17,7 +17,7 @@ pygame.display.set_caption("Platformer")
 active_sprites = pygame.sprite.Group()
 player = Player()
 
-level_list = [Level_01(player), Level_02(player)]
+level_list = [Level_01(player), Level_02(player), Level_03(player)]
 current_level_idx = 0
 current_level = level_list[current_level_idx]
 
