@@ -8,4 +8,4 @@ W to jump
 
 Collect all coins on each level in order to win
 
-Don't step on spikes or you will die and have to reset to very beginning
+Don't step on spikes or you will die and have to reset to beginning of level
