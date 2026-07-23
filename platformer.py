@@ -50,10 +50,11 @@ while running:
         coin.collect()
     
     for coin in current_level.coin_list:
-        if coin.peaked and not overlay.active and current_level_idx < len(level_list) - 1:
+        if coin.peaked and not overlay.active:
+            coin.peaked = False
             overlay.start()
             break
-        
+            
     if state.game_over:
         pygame.event.set_blocked(pygame.KEYDOWN)
         start_button.draw(screen)
@@ -72,6 +73,8 @@ while running:
             current_level = level_list[current_level_idx]
             player.level = current_level
             player.reset()
+        else:
+            state.game_over = True
 
     pygame.display.flip()
     pygame.key.set_repeat(50, 50)
