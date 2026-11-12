@@ -158,7 +158,6 @@ class Level(object):
 
     def draw(self, screen):
         #draw everything
-
         screen.fill(SKY_BLUE)
 
         self.platform_list.draw(screen)
